@@ -74,9 +74,9 @@ SAMD21Timers::~SAMD21Timers()
 	 // Set _hw mode as match frequency
 	 _hw->COUNT16.CTRLA.reg |= TC_CTRLA_WAVEGEN_MPWM;
 	 //set prescaler and enable _hw
-	 _hw->COUNT16.CTRLA.reg |= TC_CTRLA_PRESCALER_DIV1 | TC_CTRLA_ENABLE;
+	 _hw->COUNT16.CTRLA.reg |= TC_CTRLA_PRESCALER_DIV1024 | TC_CTRLA_ENABLE;
 	 //set _hw timer counter based off of the system clock and the user defined sample rate or waveform
-	 if (IntEnable) _hw->COUNT16.CC[0].reg = (uint16_t) ((8000000 / 2) / sampleRate -1);
+	 if (IntEnable) _hw->COUNT16.CC[0].reg = (uint16_t) (((8000000/1024) / 2) / sampleRate -1);
 	 while (isSyncing());
 	 
 	 // Configure interrupt request
@@ -121,7 +121,7 @@ SAMD21Timers::~SAMD21Timers()
  
  void SAMD21Timers::setCount(int rate)
  {
-	 _hw->COUNT16.CC[0].reg = (uint16_t) ((F_CPU / 2) / rate -1);
+	 _hw->COUNT16.CC[0].reg = (uint16_t) ((8000000 / 2) / rate -1);
 	 while (isSyncing());
  }
  
